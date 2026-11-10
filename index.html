@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keepsake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel+Decorative:wght@700&family=Special+Elite&family=Playfair+Display:ital,wght@1,800&family=Abril+Fatface&family=Pacifico&family=Gloria+Hallelujah&family=Fredericka+the+Great&family=Cormorant+Garamond:ital,wght@1,700&family=Dancing+Script:wght@700&family=Caveat:wght@700&family=Lora:wght@500&family=Righteous&display=swap" rel="stylesheet">
+<style>
+/* ============ 1. STYLES ============ */
+:root{--bg:#110b1d;--card:#1c1430;--ink:#f6efe6;--mute:#a99dc2;--acc:#ff5c8a;--pl:#2a1f45;--sel:#4a3a78;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,sans-serif}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid #fff;outline-offset:2px}
+[hidden]{display:none!important}
+.app{max-width:520px;margin:0 auto;padding:14px 14px calc(110px + env(safe-area-inset-bottom,0px))}
+section{display:none}#home{display:block}
+/* home */
+header{display:flex;align-items:center;justify-content:space-between;margin:0 2px 14px}
+h1{margin:0;font:400 clamp(46px,13vw,62px)/1 "Pirata One",serif;background:linear-gradient(100deg,#fff 40%,#ffd9e4 50%,#fff 60%) 120% 0/250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 2.4s .3s ease-out 1 forwards}
+@keyframes shine{to{background-position:-30% 0}}
+.acts{display:flex;gap:10px}
+.ic{width:44px;height:44px;border-radius:50%;background:var(--pl);display:grid;place-items:center;position:relative}
+.ic svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dot{position:absolute;top:10px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--acc)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{position:relative;aspect-ratio:1;border-radius:28px;display:grid;place-items:center;text-align:center;padding:8px;color:#fff;font-size:clamp(20px,5.8vw,30px);line-height:1.1;text-shadow:0 2px 10px #0006;background-size:220% 220%;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;animation:pop .5s calc(var(--i)*60ms) both cubic-bezier(.2,1.3,.4,1),drift 9s ease-in-out infinite alternate;transition:transform .15s}
+.tile:active{transform:scale(.95)}
+.tile.drag{animation:none!important;box-shadow:0 22px 44px #000b;transform:scale(1.07);opacity:.96;transition:none}
+@keyframes pop{from{opacity:0;transform:scale(.8) translateY(14px)}}
+@keyframes drift{to{background-position:100% 100%}}
+.inf{position:absolute;top:9px;right:9px;width:22px;height:22px;border-radius:50%;background:#ffffff40;color:inherit;font:italic 700 13px Lora,serif;display:grid;place-items:center;text-shadow:none}
+/* screen headers, search, segmented controls */
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.top h2{margin:0;font:400 30px "Special Elite",monospace;flex:1}
+.live{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:99px;background:#24193c;color:var(--ink);font-size:13px;font-weight:700}
+.live i{width:8px;height:8px;border-radius:50%;background:#3ddc84;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.lead{color:var(--mute);margin:0 2px 8px;line-height:1.45;font-size:15px}
+.search{width:100%;border-radius:16px;background:#24193c;padding:13px 16px;border:2px solid transparent}
+.search:focus{border-color:var(--acc);outline:0}
+.segc{display:flex;background:#24193c;border-radius:14px;padding:3px;margin-top:10px}
+.segc.sub{margin-top:8px}
+.segc button{flex:1;padding:9px 4px;border-radius:11px;color:var(--mute);font-size:14px;font-weight:600;transition:background .2s,color .2s}
+.segc .on{background:var(--sel);color:#fff}
+.trend{display:flex;gap:16px;overflow-x:auto;padding:12px 2px 0;scrollbar-width:none;font-size:14px;white-space:nowrap}
+.trend button{color:var(--mute)}.trend .on{color:#fff;font-weight:700}
+.chip{flex:none;padding:8px 14px;border-radius:99px;background:var(--pl);color:var(--ink);font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:var(--sel)}
+.empty{text-align:center;color:var(--mute);padding:40px 10px}
+/* cards */
+.feed{display:grid;gap:16px;margin-top:14px}
+.post{border-radius:20px;padding:20px 18px 14px;background-size:cover;box-shadow:0 8px 24px #0006}
+.post.in,.idea.in{animation:rise .45s calc(var(--d)*70ms) both ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.sc1{background-image:linear-gradient(160deg,#ff7a59,#c2307a,#3a1c71);color:#fff}
+.sc2{background-image:linear-gradient(170deg,#0f2027,#2c5364);color:#fff}
+.sc3{background-image:linear-gradient(160deg,#c6f77c,#4cb944);color:#10300c}
+.sc4{background-image:linear-gradient(160deg,#ffe29f,#ffa99f,#ff719a);color:#3a1020}
+.hd{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.kb{padding:3px 10px;border-radius:99px;background:#0003;font:700 12px system-ui}
+.hero{font:700 34px/1.1 "Cinzel Decorative",serif;letter-spacing:3px;margin-bottom:10px;word-break:break-word}
+.txt{line-height:1.3;white-space:pre-wrap;overflow-wrap:anywhere}
+.h{font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px;padding:0}
+.md{width:100%;border-radius:14px;margin-top:12px;max-height:340px;object-fit:cover;background:#000;display:block}
+.x2{margin-top:12px;padding:10px 12px;border-radius:12px;background:#0002;font-size:15px;line-height:1.4}
+.lt{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px}.lt .pb{flex:1}
+.pb{height:8px;background:#2a1f45;border-radius:9px;overflow:hidden}
+.pb i{display:block;height:100%;background:linear-gradient(90deg,#ff5c8a,#ffd166);border-radius:9px;transition:width .5s}
+.meta{display:flex;align-items:center;gap:4px;margin-top:14px;font-size:14px}.meta .t{flex:1;opacity:.75}
+.act{padding:7px 10px;border-radius:99px;background:#0002;display:flex;gap:5px;align-items:center;color:inherit}
+.act.liked{background:var(--acc);color:#fff}.liked .em{display:inline-block;animation:beat .35s}
+@keyframes beat{50%{transform:scale(1.5)}}
+.act svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cm{margin-top:12px;border-top:1px solid #0003;padding-top:10px;display:grid;gap:8px;font-size:15px}
+.cm p{margin:0;padding:8px 11px;background:#0002;border-radius:12px}
+.cm form{display:flex;gap:8px}.cm input{flex:1;min-width:0;border-radius:12px;padding:9px 12px;background:#0003;border:0;color:inherit}
+.cm input::placeholder{color:inherit;opacity:.6}.cm button{padding:0 14px;border-radius:12px;background:var(--acc);color:#fff}
+/* suggest */
+.idea{background:var(--card);border-radius:20px;padding:18px}
+.it{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.it h3{margin:0;font:400 26px/1.1 "Pirata One",serif}
+.idea p{margin:8px 0 12px;line-height:1.45;color:#d8cfe8}
+.idea .act{background:var(--pl)}
+.bd{flex:none;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--pl)}.bd.w{background:#ffd166;color:#3a2600}.bd.c{background:#3a2a3a;color:var(--mute)}
+/* floating bubbles */
+#nav button,.fab{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:1px solid #ffffff33;box-shadow:inset 0 2px 0 #ffffff40,0 10px 24px #000a,0 0 0 4px #ffffff0a;transition:transform .3s,opacity .3s;z-index:6;color:#fff}
+#nav button{background:radial-gradient(circle at 30% 25%,#5e49a8,#241a45 72%);left:max(16px,calc(50% - 244px))}
+#nav svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fab{right:max(16px,calc(50% - 244px));font-size:23px;line-height:1;background-size:200% 200%}
+#nav button:active,.fab:active{transform:scale(.92)}
+#nav.away button,body.away .fab{transform:translateY(90px);opacity:0}
+/* sheets, popovers, toast */
+.sheet{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;z-index:9}.sheet.open{display:flex}
+.pane{width:100%;max-width:520px;margin:0 auto;background:var(--card);border-radius:26px 26px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));max-height:94%;overflow:auto;animation:up .3s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.pane h3{margin:0 0 8px;font:400 32px "Pirata One",serif}.pane p{margin:0 0 16px;line-height:1.5;color:#d8cfe8}
+.pane input[type=text],.pane textarea{width:100%;border-radius:14px;background:var(--pl);border:0;padding:12px 14px;margin-bottom:10px}
+.pane textarea{height:120px;resize:none}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sw{width:36px;height:36px;border-radius:12px;border:3px solid transparent;flex:none}.sw.on{border-color:#fff}.sw.plus{background:var(--pl);color:#fff;font-size:20px}
+.go{width:100%;padding:14px;border-radius:16px;background:var(--acc);color:#fff;font-weight:700;font-size:17px}
+#pop{position:fixed;z-index:40;background:var(--pl);border:1px solid #ffffff22;border-radius:18px;padding:10px;width:min(320px,calc(100vw - 24px));box-shadow:0 18px 40px #000a;animation:popin .18s ease-out}
+@keyframes popin{from{opacity:0;transform:translateY(6px) scale(.97)}}
+.cg{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;justify-items:center}
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:230px;overflow:auto}
+.fo{padding:11px 8px;border-radius:12px;background:#33265a;font-size:20px}.fo.on{background:var(--sel)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#fff;color:#111;padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:50;white-space:nowrap}.toast.on{opacity:1}
+/* notifications + profile */
+.ni{display:flex;gap:12px;align-items:center;padding:12px 4px;border-radius:14px;width:100%;text-align:left;color:var(--ink)}.ni:active{background:#ffffff0d}
+.av2{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--pl)}
+.ni p{margin:0;line-height:1.35}.ni small{color:var(--mute)}
+.ud{margin-left:auto;width:10px;height:10px;border-radius:50%;background:#4d9fff;flex:none}
+.ngh{margin:16px 2px 4px;font-weight:700}
+.back{width:42px;height:42px;border-radius:50%;background:var(--pl);font-size:22px}
+.pcard{background:var(--card);border-radius:22px;padding:20px;text-align:center}
+.av{width:78px;height:78px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font:400 40px "Pirata One",serif;box-shadow:0 0 0 4px var(--bg),0 0 0 7px #ff5c8a88}
+.pn{display:flex;align-items:center;justify-content:center;gap:10px}.pn b{font:400 30px "Pirata One",serif}
+.bio{width:100%;margin-top:12px;border-radius:12px;background:#24193c;border:0;padding:10px 12px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.stats div{background:var(--card);border-radius:16px;padding:12px 2px;text-align:center}.stats b{display:block;font-size:22px}.stats span{font-size:11px;color:var(--mute)}
+#badges{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none}
+.bg{flex:none;width:86px;padding:10px 4px;border-radius:16px;background:var(--card);text-align:center}.bg span{font-size:24px;display:block}.bg small{font-size:11px;color:var(--mute)}.bg.lk{opacity:.4;filter:grayscale(1)}
+.pi{background:var(--card);border-radius:16px;padding:14px}.pi p{margin:0 0 6px;line-height:1.4}.pi span{font-size:13px;color:var(--mute)}
+.set{display:grid}.set label{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid #ffffff14}
+.set input{width:20px;height:20px;accent-color:var(--acc)}
+.danger{margin-top:16px;padding:13px;border-radius:14px;background:#3a1a2a;color:#ff8aa5;font-weight:700}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);height:84px;margin-bottom:12px;border-radius:28px;overflow:hidden;background:linear-gradient(135deg,#7b2ff7,#f107a3,#ff8a00);background-size:220% 220%;animation:drift 9s ease-in-out infinite alternate;box-shadow:0 8px 24px #0005}
+.strip button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:700 15px system-ui;color:#fff;text-shadow:0 2px 8px #0005;border-right:1px solid #ffffff40}.strip button:last-child{border:0}.strip span{font-size:24px}.strip button:active{background:#ffffff22}
+.tile.wide{grid-column:1/-1;aspect-ratio:auto;height:84px}
+.hr{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;border-radius:20px;background-size:cover;margin-bottom:10px}
+.hr span{font-size:24px}.hr small{display:block;opacity:.85;line-height:1.3;font-size:13px}
+.hr.tr{background:var(--card);color:var(--ink)}.hr.tr b{font-size:22px;width:28px;text-align:center;color:var(--acc)}.hr.tr p{margin:2px 0 0;line-height:1.3}.hr.tr div{flex:1}.hr.tr span{font-size:15px}
+.sheet.full{background:var(--bg);align-items:stretch}
+.full .pane{max-width:520px;height:100%;max-height:100%;border-radius:0;animation:none;padding-top:max(16px,env(safe-area-inset-top))}
+.full textarea{height:220px!important}
+.cb{display:flex;align-items:center;gap:10px;margin-bottom:14px}.cb b{flex:1;font-size:17px}
+.go.sm{width:auto;padding:9px 20px;font-size:15px;border-radius:99px}
+.pane input[type=date]{width:100%;border-radius:14px;background:var(--pl);border:0;padding:11px 12px;margin-bottom:10px;color:inherit}
+#nav{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:6px;padding:6px;border-radius:99px;background:#241a45e6;backdrop-filter:blur(12px);border:1px solid #ffffff2a;box-shadow:0 12px 30px #000b;z-index:6;transition:transform .3s,opacity .3s}
+#nav button,#nav .fab{position:static;left:auto;right:auto;bottom:auto;width:46px;height:46px;box-shadow:inset 0 2px 0 #ffffff33;border:0}
+#nav.away{transform:translate(-50%,90px);opacity:0}
+#nav.away button,body.away #nav .fab{transform:none;opacity:1}
+body.rm *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1{color:#fff}}
+</style></head>
+<body>
+<!-- ============ 2. PAGE SHELL ============ -->
+<div class="app">
+ <section id="home">
+  <header><h1>Keepsake</h1><div class="acts">
+   <button class="ic" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 1 1 12 0v6l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><i class="dot"></i></button>
+   <button class="ic" id="me" aria-label="Profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button></div></header>
+  <div class="strip"><button data-s="explore"><span>🧭</span>Explore</button><button data-s="top"><span>🏅</span>Top 10</button><button data-s="surprise"><span>🎲</span>Surprise</button></div>
+  <main class="grid" id="grid"></main>
+ </section>
+ <section id="board"><!-- one screen for every bubble except Suggest -->
+  <div class="top"><h2 id="bt"></h2><button class="live" id="live"></button></div>
+  <p class="lead" id="bp" hidden></p>
+  <input class="search" id="bq" type="search" placeholder="Search words or #hashtags" aria-label="Search">
+  <div class="segc" id="btabs"><button data-bt="new">New</button><button data-bt="top">Top</button></div>
+  <div class="segc sub" id="brs" hidden><button data-br="day">Today</button><button data-br="week">Week</button><button data-br="month">Month</button><button data-br="year">Year</button><button data-br="all">All time</button></div>
+  <div class="trend" id="btags"></div>
+  <div class="feed" id="bfeed"></div>
+ </section>
+ <section id="hub"><div class="top"><h2 id="ht"></h2></div><input class="search" id="hq" type="search" placeholder="Search bubbles" aria-label="Search bubbles"><div class="segc" id="hrs" hidden><button data-hr="day">Today</button><button data-hr="week">Week</button><button data-hr="month">Month</button><button data-hr="all">All time</button></div><div id="hl" style="margin-top:12px"></div></section>
+ <section id="suggest">
+  <div class="top"><h2 style="font-family:'Pirata One',serif;font-size:40px">Suggest</h2><button class="live"><i></i>0.4k today</button></div>
+  <p class="lead">Propose the next bubble. Any idea with 100 supporters within 30 days gets built.</p>
+  <div class="segc"><button data-st="new">New</button><button data-st="top">Top</button><button data-st="crowned">Crowned</button></div><div class="segc sub" id="srs" hidden><button data-sr="day">Today</button><button data-sr="week">Week</button><button data-sr="month">Month</button><button data-sr="year">Year</button><button data-sr="all">All time</button></div><div class="feed" id="sfeed"></div>
+ </section>
+ <section id="profile">
+  <div class="top"><h2>Profile</h2><button class="ic" id="gear" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></button></div>
+  <div class="pcard"><div class="av" id="av"></div><div class="pn"><b id="pname"></b><button class="chip" id="shuf">Shuffle</button></div>
+   <input class="bio" id="bio" maxlength="80" placeholder="Add a line about you" aria-label="About you">
+   <p class="lead" style="margin:10px 0 0">Only you can see this name. Everything you post stays anonymous.</p></div>
+  <div class="stats" id="stats"></div><div id="badges"></div>
+  <div class="segc"><button data-pt="c">Posts</button><button data-pt="q">Questions</button><button data-pt="i">Ideas</button></div>
+  <div class="feed" id="plist"></div>
+ </section>
+ <section id="notif">
+  <div class="top"><button class="back" aria-label="Back">&#8249;</button><h2>Notifications</h2><button class="live" id="mark">Mark all read</button></div>
+  <div id="nlist"></div>
+ </section>
+</div>
+<nav id="nav" hidden><button id="nh" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg></button><button class="fab" id="fab" hidden aria-label="Add"></button></nav>
+
+<div class="sheet full" id="sheet"><div class="pane"><!-- composer: same for every board -->
+ <div class="cb"><button class="back" data-close="sheet" aria-label="Close">&#10005;</button><b id="ctitle">New</b><button class="go sm" id="post">Post</button></div>
+ <div class="row" id="cols"></div>
+ <div class="row"><button class="chip" id="fbtn" data-pop="font"></button><label class="chip" id="mchip" style="cursor:pointer" hidden>&#128247; Photo or video<input type="file" id="mf" accept="image/*,video/*" hidden></label><span id="mp"></span></div>
+ <div class="two"><input type="text" id="lab" placeholder="Label" maxlength="30" aria-label="Label"><input type="text" id="tw" aria-label="Extra"></div>
+ <div class="lead" id="twh" hidden style="margin:-4px 2px 8px"></div>
+ <textarea id="body" maxlength="280"></textarea>
+ <div id="rg" hidden><div class="lead" style="margin:0 0 4px"><span id="rl"></span> <b id="rv">50%</b></div><input type="range" id="x3" min="0" max="100" value="50" style="width:100%;accent-color:#ff5c8a;margin-bottom:10px" aria-label="Slider"></div>
+ 
+</div></div>
+<div class="sheet" id="info"><div class="pane"><h3 id="it"></h3><p id="ib"></p><button class="go" id="ix">Got it</button></div></div>
+<div class="sheet full" id="ss"><div class="pane"><div class="cb"><button class="back" data-close="ss" aria-label="Close">&#10005;</button><b>Suggest a bubble</b><button class="go sm" id="ssgo">Submit</button></div><input type="text" id="stt" maxlength="40" placeholder="Name your bubble" aria-label="Name"><textarea id="sdd" maxlength="500" placeholder="Describe it in detail: what it is, who it&rsquo;s for and how it would work." aria-label="Details"></textarea></div></div>
+<div class="sheet" id="sets"><div class="pane"><h3>Settings</h3><div class="set"><label>Notifications<input type="checkbox" id="t1" checked></label><label>Daily check-in reminder<input type="checkbox" id="t2"></label><label>Reduce motion<input type="checkbox" id="t3"></label><button class="danger" id="del">Delete everything I posted</button></div><button class="go" id="sx" style="margin-top:14px">Done</button></div></div>
+<div id="pop" hidden></div><div class="toast" id="toast"></div>
+
+<script>
+/* ============ 3. THE BUBBLES ============
+   One entry per bubble. To change a bubble, edit only its entry:
+   look    = tile gradient          css   = tile/title font (and ink colour)
+   info    = text behind the "i"    fab   = icon on the add button
+   react   = [emoji, name] reaction hint = placeholder in the writing box
+   twist   = [placeholder, prefix shown on the card] for the box next to Label
+   block   = show the twist as a box under the text (otherwise a small tag)
+   hero    = show the twist as a big word    media = allow photo/video
+   slider  = [question, word] adds a slider  prompt = daily prompts
+   seeds   = sample posts: [hoursAgo, text, likes, label, twist, comments, slider] */
+const BUBBLES=[
+{n:'Memento',look:'linear-gradient(135deg,#ff4d6d,#c9184a,#ff8fa3)',css:'font-family:"Cinzel Decorative",serif;font-weight:700',
+ info:'Save a moment worth keeping: a photo, a video or a few words. Add who was there.',
+ fab:'📷',react:['💛','Treasure'],hint:'Describe a moment worth keeping…',twist:['Who was there?','With '],media:1,
+ seeds:[[5,'Dad teaching me to ride a bike in the church parking lot. He let go and I never noticed. #family #childhood',212,'First ride','Dad'],[60,'The smell of rain the day my acceptance letter came. #proud',96,'','my best friend']]},
+{n:'Confess',look:'linear-gradient(135deg,#8338ec,#3a0ca3,#b5179e)',css:'font-family:"Special Elite",monospace',
+ info:'Say what you never said, anonymously. Tap the heart if you relate and reply with kindness.',
+ fab:'✎',react:['🤍','I relate'],hint:'Say what you never said. Add #hashtags so others can find it.',twist:['To','to '],
+ seeds:[[0.2,'I still set two plates at dinner and then quietly put one back. #missing',41,'Missing you','someone I miss',['Me too. Every night.','Sending you a hug.']],[3,'I’m sorry I stopped replying. I was drowning and didn’t know how to say it. #sorry #friendship',88,'An apology','my best friend',['Say it to them. They’re waiting.']],[20,'I tell everyone I’m fine so you never worry. I’m saying it again today. #family #college',153,'Hiding it','Mum'],[70,'I rehearse hello for an hour and then look at my shoes. #crush #college',67,'A crush','the girl in row three',['Just say hi. You’ve got this!']],[400,'You were right to leave. It just took me this long to say it. #growth',212,'To past me','me, five years ago'],[1500,'Your one sentence of belief is the reason I applied. #gratitude',301,'Thank you','my old teacher',['This made my day.']]]},
+{n:'Achievements',look:'linear-gradient(135deg,#ffb703,#fb5607,#ffd166)',css:'font-family:"Playfair Display",serif;font-style:italic;font-weight:800',
+ info:'Celebrate wins big and small, and say how long it took. Cheer on other people’s.',
+ fab:'🏆',react:['👏','Cheer'],hint:'What did you achieve? Big or small…',twist:['How long did it take?','took '],
+ seeds:[[8,'Finished my first marathon after two years of walking. #running',148,'First marathon','2 years'],[90,'Passed the exam I failed twice. #persistence',231,'','3 attempts']]},
+{n:'Deep Question',look:'linear-gradient(135deg,#00c2a8,#0077b6,#48cae4)',css:'font-family:"Abril Fatface",serif',
+ info:'Ask the questions that keep you up at night and read how others answer. The most pondered rise to the top.',
+ fab:'?',react:['🤔','Ponder'],hint:'Ask a question that makes people stop and think…',twist:['What made you ask this?','Why I ask: '],block:1,answers:1,
+ seeds:[[2,'If you could relive one ordinary day, which would you choose? #time #memory',134,'Time','I keep missing the small days',['A slow Sunday with my grandmother. I didn’t know it was the last one.']],[30,'What would you do differently if nobody could ever judge you? #fear',96,'Courage',''],[200,'What do you owe the person you used to be? #growth',188,'Growth','',['An apology, mostly. And a thank you.']],[900,'Is it better to be loved or to be known? #love',241,'Love',''],[4000,'What are you pretending not to know? #truth',305,'Truth','',['That I’m allowed to want more.']],[9000,'When did you last feel truly understood? #connection',412,'Connection','']]},
+{n:'Say Goodbye',look:'linear-gradient(135deg,#4cc9f0,#4361ee,#7209b7)',css:'font-family:"Pacifico",cursive',
+ info:'Say goodbye to a person, a place, a thing or a chapter of life, and name what you’ll keep.',
+ fab:'👋',react:['🤗','Sending a hug'],hint:'Say goodbye to someone, somewhere or something…',twist:['What I’ll keep','Keeping: '],block:1,
+ seeds:[[6,'Goodbye to the apartment where I learned to be alone. #home',64,'My first flat','The quiet and the view'],[70,'Goodbye, Grandma. I still call your number sometimes. #family',305,'','Her laugh']]},
+{n:'Regrets',look:'linear-gradient(135deg,#ff6b35,#9d0208,#e85d04)',css:'font-family:"Gloria Hallelujah",cursive',
+ info:'Name what you would do differently, and what it taught you.',
+ fab:'🖋',react:['🤝','I understand'],hint:'What do you regret?',twist:['What did it teach you?','What I learned:'],block:1,
+ seeds:[[10,'I quit piano because I was scared of being bad. #music',87,'Piano','That being bad at something is how you begin.'],[120,'I never told my friend I was proud of them. #friendship',142,'','Say it the same day.']]},
+{n:'Purpose',look:'linear-gradient(135deg,#80ed99,#06a77d,#2ec4b6)',css:'font-family:"Fredericka the Great",serif',ink:'#052b22',
+ info:'Inspired by Loki’s “glorious purpose”: everyone wants to know what they were born for. Say why it matters and who it is for.',
+ fab:'✦',react:['✨','Inspire'],hint:'Why does this matter to you?',twist:['Who is it for?','For:'],block:1,
+ seeds:[[4,'To help one person feel less alone each week, like my teacher did for me. #teaching',77,'','Students who doubt themselves'],[50,'I want to build things that make people feel seen. #building',119,'','People who feel unseen']]},
+{n:'Solitude',look:'linear-gradient(135deg,#5e60ce,#240046,#7b2cbf)',css:'font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:700',
+ info:'A quiet room for the lonely hours. Find company without having to explain.',
+ fab:'🌙',react:['🌙','Here too'],hint:'It’s quiet. What are you thinking about?',twist:['What would help tonight?','Would help:'],block:1,
+ seeds:[[3,'The fridge hum is the only conversation tonight. #night',58,'','A message from anyone'],[40,'I like my own company. I just wish someone asked. #quiet',93,'','A walk and a stranger’s smile']]},
+{n:'Gratitude',look:'linear-gradient(135deg,#ffd166,#ef476f,#ff9e00)',css:'font-family:"Lora",serif;font-weight:500',
+ info:'Thank someone, or something, out loud. Fill your three good things for the day.',
+ fab:'🙏',react:['🙏','Grateful too'],hint:'Thank someone, or something…',twist:['Thank you to…','Thanks to: '],
+ prompt:['What small thing went right today?','Who made your week easier?','What are you taking for granted?','What made you smile this morning?'],
+ seeds:[[2,'Thank you to the stranger who held the door when I was crying. #kindness',180,'A stranger','whoever held that door'],[30,'Grateful for the friend who still checks in at midnight. #friendship',126,'','my midnight friend']]},
+{n:'Forgive',look:'linear-gradient(135deg,#f72585,#7209b7,#ff70a6)',css:'font-family:"Dancing Script",cursive;font-weight:700',
+ info:'Forgive someone, or yourself. Say how long you carried it and how much you have let go.',
+ fab:'🤍',react:['🤍','Same here'],hint:'Who or what are you forgiving?',twist:['Carried for…','Carried for '],slider:['How much have you let go?','let go'],
+ seeds:[[9,'I forgive myself for the years I spent shrinking. #self',101,'Myself','8 years',[],80],[80,'I forgave him. He never asked, and that’s fine. #peace',167,'My dad','12 years',[],55]]},
+{n:'Dreams',look:'linear-gradient(135deg,#00d2ff,#3a47d5,#a18cd1)',css:'font-family:"Caveat",cursive;font-weight:700',
+ info:'Share the dreams you’re chasing and the ones you set down, and pick a day to come back and check on them.',
+ fab:'🌠',react:['🚀','Go for it'],hint:'A dream you’re chasing or set down…',twist:['Check back on…','Check back '],date:'Come back to check on this dream on…',
+ seeds:[[7,'A tiny bookshop that also serves tea. #books',72,'Bookshop','Mar 2029'],[100,'Build apps that people actually love. #code',134,'','Jan 2027']]},
+{n:'Advice',look:'linear-gradient(135deg,#ff9a9e,#fad0c4,#fbc2eb)',css:'font-family:"Righteous",sans-serif',ink:'#4a1230',
+ info:'Advice you wish someone had given you. Say who needs to hear it.',
+ fab:'💡',react:['💡','Helpful'],hint:'What do you wish someone had told you?',twist:['Who needs to hear this?','For: '],
+ seeds:[[6,'You don’t have to reply to everything the moment it arrives. #boundaries',142,'Rest','overthinkers'],[48,'Ask for the thing. The worst case is a no, and you’re already living with that. #courage',207,'','anyone afraid to ask']]},
+{n:'Suggest',look:'linear-gradient(135deg,#ffe53b,#ff7e5f,#ff2525)',css:'font-family:"Pirata One",serif',ink:'#2a0a00',
+ info:'Propose the next bubble. If it gets 100 supporters within 30 days, we build it.',fab:'+',special:'suggest'}
+];
+const FONTS=[{n:'Caveat',c:'Handwriting',f:'Caveat',s:30,w:700},{n:'Special Elite',c:'Typewriter',f:'Special Elite',s:20,w:400},{n:'Lora',c:'Serif',f:'Lora',s:21,w:500},{n:'Gloria',c:'Handwriting',f:'Gloria Hallelujah',s:20,w:400},{n:'Dancing',c:'Handwriting',f:'Dancing Script',s:30,w:700},{n:'Pacifico',c:'Handwriting',f:'Pacifico',s:22,w:400},{n:'Playfair',c:'Serif',f:'Playfair Display',s:23,w:800,i:1},{n:'Cormorant',c:'Serif',f:'Cormorant Garamond',s:27,w:700,i:1},{n:'Pirata',c:'Gothic',f:'Pirata One',s:30,w:400},{n:'Abril',c:'Display',f:'Abril Fatface',s:22,w:400},{n:'Fredericka',c:'Display',f:'Fredericka the Great',s:22,w:400},{n:'Cinzel',c:'Display',f:'Cinzel Decorative',s:20,w:700}];
+const COLORS=['','#ffffff','#111111','#ffd166','#ff5c8a','#4cc9f0'],MORE=['#ff9f1c','#2ec4b6','#e71d36','#9b5de5','#00f5d4','#f15bb5','#fee440','#8ac926','#1982c4','#ff595e','#c9ada7','#6a4c93'];
+const NOTES=[['🤍','Someone relates to your confession','2m ago',1,'Confess'],['❓','A new answer on your deep question','1h ago',1,'Deep Question'],['👏','3 people cheered an achievement you shared','3h ago',1,'Achievements'],['👑','“Voices” reached 100 supporters and was crowned','Yesterday',0,'Suggest'],['💡','“Apology” is at 28 of 100 supporters','2d ago',0,'Suggest'],['🌱','Welcome to Keepsake. Everything here is anonymous.','3d ago',0,'']];
+
+/* ============ 4. DATA + SAVING (kept on this device) ============ */
+const $=s=>document.querySelector(s),H=3600e3,DAY=864e5,KEY='keepsake_v4';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const B=n=>BUBBLES.find(b=>b.n==n);
+let uid=100;
+const mk=(h,text,likes,label,tw,cm,x3)=>({id:++uid,ts:Date.now()-h*H,text,likes,liked:0,label:label||'',tw:tw||'',cm:cm||[],x3,scene:1+uid%4,font:uid%3,col:'',open:0,hide:0});
+const DB={};BUBBLES.forEach(b=>{if(b.seeds)DB[b.n]=b.seeds.map(s=>mk(...s))});
+const idea=(id,d,t,n,desc,cm)=>({id,ts:Date.now()-d*DAY,t,n,d:desc,cm,me:0,open:0});
+let ideas=[idea(1,5,'Letters to Future Me',62,'Write a note that stays sealed until a date you choose, then lands in your inbox.',['I’d use this every New Year.']),idea(2,20,'Voices',104,'Anonymous audio confessions with voice masking, for the things too heavy to type.',[]),idea(3,3,'Apology',28,'Guided prompts that help you write a sincere apology and decide whether to send it.',['Yes please.']),idea(4,12,'Childhood',77,'Share a memory from when you were little and see who remembers the same thing.',[]),idea(5,27,'Healing',9,'A space to track small steps after loss, together with people on the same road.',[])];
+let bio='',pname=['Quiet','Lantern'],order=BUBBLES.filter(b=>!b.special).map(b=>b.n),seen=[];
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){Object.assign(DB,s.DB);ideas=s.ideas||ideas;bio=s.bio||'';pname=s.pname||pname;seen=s.seen||[];if(s.order&&s.order.length==order.length&&order.every(n=>s.order.includes(n)))order=s.order}}catch(x){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({DB,ideas,bio,pname,order,seen}))}catch(x){}};
+const ago=t=>{const m=(Date.now()-t)/6e4;return m<2?'Just now':m<60?Math.floor(m)+'m ago':m<1440?Math.floor(m/60)+'h ago':Math.floor(m/1440)+'d ago'};
+const R={day:DAY,week:7*DAY,month:30*DAY,year:365*DAY,all:1/0};
+let toastT;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1900)};
+const IC={chat:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',share:'<svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 14v6h14v-6"/></svg>',flag:'<svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h13l-2 4 2 4H5"/></svg>'};
+const thread=(p,ph)=>p.open?`<div class='cm'>${p.cm.map(c=>`<p>${esc(c)}</p>`).join('')}<form data-id='${p.id}'><input placeholder='${ph}' maxlength='200' aria-label='${ph}'><button>Send</button></form></div>`:'';
+
+/* ============ 5. SCREENS ============ */
+const SCR=['home','board','suggest','profile','notif','hub'];let screen='home';
+let homeY=0;const show=id=>{if(screen=='home'&&id!='home')homeY=scrollY;screen=id;SCR.forEach(s=>$('#'+s).style.display=s==id?'block':'none');$('#nav').hidden=id=='home'||id=='notif';$('#fab').hidden=!(id=='board'||id=='suggest');$('#nav').classList.remove('away');document.body.classList.remove('away');scrollTo(0,id=='home'?homeY:0)};
+let ly=0;addEventListener('scroll',()=>{const y=scrollY;if(Math.abs(y-ly)>8){const a=y>ly&&y>60;$('#nav').classList.toggle('away',a);document.body.classList.toggle('away',a);ly=y}},{passive:true});
+$('#nh').onclick=()=>show('home');document.querySelector('.back').onclick=()=>show('home');
+const fabFor=n=>{const b=B(n);$('#fab').innerHTML=b.fab;$('#fab').style.backgroundImage=b.look};
+const open=n=>n=='Suggest'?(show('suggest'),fabFor(n),sugRender(true)):openBoard(n);
+
+/* home grid, info buttons, press-and-hold to rearrange */
+const grid=()=>{$('#grid').innerHTML=order.map((n,i)=>{const b=B(n);return `<div class='tile' tabindex='0' role='button' data-n='${n}' style='--i:${i};background-image:${b.look};${b.css};${b.ink?'color:'+b.ink+';text-shadow:none':''}'><span>${n}</span>${seen.includes(n)?'':`<button class='inf' data-i='${n}' aria-label='About ${n}'>i</button>`}</div>`}).join('')};
+const gridAll=()=>{grid();const b=B('Suggest');$('#grid').insertAdjacentHTML('beforeend',`<div class='tile wide' tabindex='0' role='button' data-n='Suggest' style='--i:12;background-image:${b.look};${b.css};color:${b.ink};text-shadow:none'><span>Suggest</span>${seen.includes('Suggest')?'':"<button class='inf' data-i='Suggest' aria-label='About Suggest'>i</button>"}</div>`)};gridAll();
+let pr=null,dg=null,ph=null,off=[0,0],noclk=0;
+const XY=ev=>{const p=ev.touches?(ev.touches[0]||ev.changedTouches[0]):ev;return[p.clientX,p.clientY]};
+const dst=ev=>{const t=ev.target.closest('.tile');if(!t||t.classList.contains('wide')||ev.target.closest('.inf'))return;const[x,y]=XY(ev);pr={x,y};pr.k=setTimeout(()=>dbeg(t,x,y),400)};
+const dbeg=(t,x,y)=>{const r=t.getBoundingClientRect();dg=t;off=[x-r.left,y-r.top];ph=document.createElement('div');ph.style.aspectRatio='1';t.before(ph);Object.assign(t.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',zIndex:30,pointerEvents:'none'});t.classList.add('drag');navigator.vibrate&&navigator.vibrate(12)};
+const dmv=ev=>{if(!pr)return;const[x,y]=XY(ev);if(!dg){if(Math.hypot(x-pr.x,y-pr.y)>10){clearTimeout(pr.k);pr=null}return}ev.cancelable&&ev.preventDefault();dg.style.left=x-off[0]+'px';dg.style.top=y-off[1]+'px';if(y>innerHeight-90)scrollBy(0,10);else if(y<90)scrollBy(0,-10);const o=document.elementFromPoint(x,y),t=o&&o.closest('.tile:not(.drag):not(.wide)');if(t){const k=[...$('#grid').children];k.indexOf(ph)<k.indexOf(t)?t.after(ph):t.before(ph)}};
+const den=()=>{if(pr)clearTimeout(pr.k);if(dg){Object.assign(dg.style,{position:'',left:'',top:'',width:'',height:'',zIndex:'',pointerEvents:''});dg.classList.remove('drag');ph.replaceWith(dg);order=[...$('#grid').children].filter(c=>c.dataset.n&&c.dataset.n!='Suggest').map(c=>c.dataset.n);save();dg=ph=null;noclk=Date.now()}pr=null};
+$('#grid').addEventListener('touchstart',dst,{passive:true});$('#grid').addEventListener('mousedown',dst);
+document.addEventListener('touchmove',dmv,{passive:false});document.addEventListener('mousemove',dmv);
+['touchend','touchcancel','mouseup'].forEach(t=>document.addEventListener(t,den));
+$('#grid').addEventListener('contextmenu',ev=>ev.preventDefault());
+$('#grid').onclick=ev=>{if(Date.now()-noclk<500)return;const i=ev.target.closest('.inf');if(i){const n=i.dataset.i;$('#it').textContent=n;$('#ib').textContent=B(n).info;$('#info').classList.add('open');if(!seen.includes(n))seen.push(n);save();i.remove();return}const t=ev.target.closest('.tile');if(t)open(t.dataset.n)};
+$('#grid').onkeydown=ev=>{if(ev.key=='Enter'&&ev.target.classList.contains('tile'))open(ev.target.dataset.n)};
+['info','ss','sets'].forEach(id=>$('#'+id).onclick=ev=>{if(ev.target.id==id||ev.target.id=='ix'||ev.target.id=='sx')$('#'+id).classList.remove('open')});
+
+/* ============ 6. BOARDS (every bubble except Suggest) ============ */
+const bs={n:'Confess',tab:'new',range:'day',q:''};
+const vis=()=>{const q=bs.q.trim().toLowerCase(),l=DB[bs.n].filter(p=>!p.hide&&(!q||(p.text+' '+p.label+' '+p.tw).toLowerCase().includes(q)));return bs.tab=='top'?l.filter(p=>Date.now()-p.ts<=R[bs.range]).sort((a,b)=>b.likes+b.liked-a.likes-a.liked):l.sort((a,b)=>b.ts-a.ts)};
+const tagify=t=>esc(t).replace(/#(\w+)/g,"<button class='h' data-tag='$1'>#$1</button>");
+const card=(b,p,i,a)=>{const f=FONTS[p.font]||FONTS[0],[,pre]=b.twist;const small=!b.block&&!b.hero&&p.tw;
+ const tags=[p.label&&`<span class='kb'>${esc(p.label)}</span>`,small&&`<span class='kb'>${pre}${esc(p.tw)}</span>`].filter(Boolean).join('');
+ return `<article class='post sc${p.scene} ${a?'in':''}' style='--d:${i}' data-id='${p.id}'>${tags?`<div class='hd'>${tags}</div>`:''}${b.hero&&p.tw?`<div class='hero'>${esc(p.tw).toUpperCase()}</div>`:''}<div class='txt' style="font-family:'${f.f}',serif;font-size:${f.s}px;font-weight:${f.w};${f.i?'font-style:italic;':''}${p.col?'color:'+p.col:''}">${tagify(p.text)}</div>${p.media?(p.mt=='v'?`<video class='md' src='${p.media}' controls playsinline></video>`:`<img class='md' src='${p.media}' alt='Attached photo'>`):''}${p.x3!=null?`<div class='lt'><span>${b.slider[1]}</span><div class='pb'><i style='width:${p.x3}%'></i></div><b>${p.x3}%</b></div>`:''}${b.block&&p.tw?`<div class='x2'><b>${pre}</b> ${esc(p.tw)}</div>`:''}<div class='meta'><span class='t'>${ago(p.ts)}</span><button class='act ${p.liked?'liked':''}' data-a='like' aria-label='${b.react[1]}' title='${b.react[1]}'><span class='em'>${b.react[0]}</span>${p.likes+p.liked}</button><button class='act' data-a='cm' aria-label='${b.answers?'Answers':'Comments'}'>${IC.chat}${p.cm.length}</button><button class='act' data-a='share' aria-label='Share'>${IC.share}</button><button class='act' data-a='rep' aria-label='Report'>${IC.flag}</button></div>${thread(p,b.answers?'Share your answer':'Add a kind comment')}</article>`};
+const banner=()=>{const b=B(bs.n),el=$('#bp');el.hidden=!b.prompt;if(b.prompt){const k=Math.min(3,DB[bs.n].filter(p=>p.id>1e3&&!p.hide&&new Date(p.ts).toDateString()==new Date().toDateString()).length);el.textContent='Today’s prompt: '+b.prompt[Math.floor(Date.now()/DAY)%b.prompt.length]+'   '+[0,1,2].map(i=>i<k?'●':'○').join(' ')+' your 3 good things today'}};
+const render=a=>{const b=B(bs.n),c={};DB[bs.n].filter(p=>!p.hide).forEach(p=>(p.text.match(/#\w+/g)||[]).forEach(t=>{t=t.toLowerCase();c[t]=(c[t]||0)+1}));
+ $('#btags').innerHTML=Object.entries(c).sort((x,y)=>y[1]-x[1]).slice(0,8).map(([t])=>`<button class='${bs.q.toLowerCase()==t?'on':''}' data-tag='${t.slice(1)}'>${t}</button>`).join('')+(bs.q?"<button data-clr='1'>Clear</button>":'');
+ document.querySelectorAll('[data-bt]').forEach(x=>x.classList.toggle('on',x.dataset.bt==bs.tab));document.querySelectorAll('[data-br]').forEach(x=>x.classList.toggle('on',x.dataset.br==bs.range));$('#brs').hidden=bs.tab!='top';banner();
+ const l=vis();$('#bfeed').innerHTML=l.length?l.map((p,i)=>card(b,p,Math.min(i,6),a)).join(''):"<div class='empty'>Nothing here yet.<br>Be the first to write it.</div>"};
+const openBoard=n=>{Object.assign(bs,{n,tab:'new',range:'day',q:''});$('#bq').value='';const b=B(n);$('#bt').style.cssText=b.css+';font-size:30px';$('#bt').textContent=n;const k=n.length*173%1500+300;$('#live').dataset.k=k;$('#live').innerHTML=`<i></i>${(k/1000).toFixed(1)}k today`;show('board');fabFor(n);render(true)};
+$('#bq').oninput=ev=>{bs.q=ev.target.value;render(false)};
+$('#bfeed').onclick=ev=>{const x=ev.target.closest('[data-a]');if(!x)return;const p=DB[bs.n].find(q=>q.id==x.closest('.post').dataset.id),a=x.dataset.a;
+ if(a=='like')p.liked^=1;else if(a=='cm')p.open^=1;else if(a=='rep'){p.hide=1;toast('Reported. We’ll review it.')}
+ else{const s=p.text+'\n— on Keepsake';(navigator.share?navigator.share({text:s}):navigator.clipboard.writeText(s).then(()=>toast('Copied to share'))).catch(()=>{});return}save();render(false)};
+$('#bfeed').onsubmit=ev=>{ev.preventDefault();const v=ev.target.querySelector('input').value.trim();if(v){DB[bs.n].find(x=>x.id==ev.target.dataset.id).cm.push(v);save();render(false)}};
+$('#live').onclick=()=>toast(Number($('#live').dataset.k).toLocaleString()+' people used '+bs.n+' today (demo)');
+
+/* composer */
+const st={font:0,col:'',fc:'Handwriting'};let media=null,mtype='i';
+const pick=()=>{const f=FONTS[st.font];
+ $('#cols').innerHTML=COLORS.map(c=>`<button class='sw ${st.col==c?'on':''}' style='background:${c||'conic-gradient(#f66,#fd6,#6f6,#6df,#f6f,#f66)'}' data-c='${c}' aria-label='Text color ${c||'auto'}'></button>`).join('')+"<button class='sw plus' data-pop='color' aria-label='More colors'>+</button>";
+ $('#fbtn').style.cssText=`font-family:'${f.f}',serif;font-size:17px;font-weight:${f.w}`;$('#fbtn').textContent='Aa · '+f.n+' ▾';
+ const t=$('#body');t.style.fontFamily=`'${f.f}',serif`;t.style.fontSize=Math.min(f.s,24)+'px';t.style.fontWeight=f.w;t.style.fontStyle=f.i?'italic':'normal';t.style.color=st.col||''};
+const fmtTw=b=>{const v=$('#tw').value.trim();return b.date&&v?new Date(v+'T00:00').toLocaleDateString(undefined,{month:'short',year:'numeric'}):v};const openComposer=()=>{const b=B(bs.n);$('#ctitle').textContent='New in '+bs.n;$('#body').placeholder=b.hint;$('#tw').placeholder=b.twist[0];$('#tw').type=b.date?'date':'text';$('#tw').value='';$('#twh').hidden=!b.date;$('#twh').textContent=b.date||'';$('#tw').maxLength=b.hero?14:b.block?120:40;$('#mchip').hidden=!b.media;$('#rg').hidden=!b.slider;if(b.slider)$('#rl').textContent=b.slider[0];media=null;$('#mp').textContent='';$('#x3').value=50;$('#rv').textContent='50%';pick();$('#sheet').classList.add('open')};
+$('#x3').oninput=()=>$('#rv').textContent=$('#x3').value+'%';
+$('#mf').onchange=()=>{const f=$('#mf').files[0];if(!f)return;if(f.size>5e6){toast('Keep files under 5 MB for now');return}const r=new FileReader();r.onload=()=>{media=r.result;mtype=f.type.startsWith('video')?'v':'i';$('#mp').textContent='✓ '+(mtype=='v'?'Video':'Photo')+' added'};r.readAsDataURL(f)};
+$('#post').onclick=()=>{const t=$('#body').value.trim();if(!t){toast('Write something first');return}const b=B(bs.n),p=mk(0,t,0,$('#lab').value.trim(),fmtTw(b));p.id=Date.now();p.ts=Date.now();p.scene=1+(Math.random()*4|0);p.font=st.font;p.col=st.col;if(media){p.media=media;p.mt=mtype}if(b.slider)p.x3=+$('#x3').value;DB[bs.n].push(p);
+ ['body','lab','tw'].forEach(k=>$('#'+k).value='');bs.tab='new';bs.q='';$('#bq').value='';$('#sheet').classList.remove('open');save();render(true);scrollTo(0,0);toast('Posted anonymously')};
+$('#sheet').onclick=ev=>{if(ev.target.id=='sheet')$('#sheet').classList.remove('open')};
+$('#fab').onclick=()=>screen=='suggest'?$('#ss').classList.add('open'):openComposer();
+
+/* pop-up windows for fonts and colors */
+const closePop=()=>{$('#pop').hidden=true;$('#pop').dataset.k=''};
+const popHTML=k=>k=='color'?`<div class='cg'>${[...COLORS,...MORE].map(c=>`<button class='sw ${st.col==c?'on':''}' style='background:${c||'conic-gradient(#f66,#fd6,#6f6,#6df,#f6f,#f66)'}' data-c='${c}' aria-label='Color ${c||'auto'}'></button>`).join('')}</div>`:`<div class='row' style='margin-bottom:8px'>${[...new Set(FONTS.map(x=>x.c))].map(c=>`<button class='chip ${st.fc==c?'on':''}' data-fcat='${c}'>${c}</button>`).join('')}</div><div class='fl'>${FONTS.map((x,i)=>x.c==st.fc?`<button class='fo ${st.font==i?'on':''}' data-fi='${i}' style="font-family:'${x.f}',serif;font-weight:${x.w};${x.i?'font-style:italic':''}">${x.n}</button>`:'').join('')}</div>`;
+const openPop=(el,k)=>{const p=$('#pop');if(!p.hidden&&p.dataset.k==k){closePop();return}p.dataset.k=k;p.innerHTML=popHTML(k);p.hidden=false;const r=el.getBoundingClientRect(),h=p.offsetHeight,w=p.offsetWidth;p.style.left=Math.max(12,Math.min(r.left,innerWidth-w-12))+'px';p.style.top=(r.bottom+8+h>innerHeight-10?Math.max(10,r.top-h-8):r.bottom+8)+'px'};
+addEventListener('keydown',ev=>{if(ev.key=='Escape')closePop()});
+
+/* ============ 7. SUGGEST ============ */
+const left=p=>Math.ceil(30-(Date.now()-p.ts)/DAY);
+const su={tab:'new',range:'all'},crowned=p=>p.n+p.me>=100;const sugList=()=>{const l=[...ideas];if(su.tab=='crowned')return l.filter(crowned).sort((a,b)=>b.n+b.me-a.n-a.me);const v=l.filter(p=>!crowned(p));return su.tab=='top'?v.filter(p=>Date.now()-p.ts<=R[su.range]).sort((a,b)=>b.n+b.me-a.n-a.me):v.sort((a,b)=>b.ts-a.ts)};const sugRender=a=>{document.querySelectorAll('[data-st]').forEach(x=>x.classList.toggle('on',x.dataset.st==su.tab));document.querySelectorAll('[data-sr]').forEach(x=>x.classList.toggle('on',x.dataset.sr==su.range));$('#srs').hidden=su.tab!='top';$('#sfeed').innerHTML=sugList().map((p,i)=>{const n=p.n+p.me,l=left(p),won=n>=100,closed=!won&&l<=0;return `<article class='idea ${a?'in':''}' style='--d:${Math.min(i,6)}' data-id='${p.id}'><div class='it'><h3>${esc(p.t)}</h3><span class='bd ${won?'w':closed?'c':''}'>${won?'Crowned':closed?'Closed':l+(l==1?' day left':' days left')}</span></div><p>${esc(p.d)}</p><div class='pb'><i style='width:${Math.min(n,100)}%'></i></div><div class='meta'><span class='t'>${n}/100 supporters</span><button class='act ${p.me?'liked':''}' data-a='s'>${p.me?'★ Supported':'☆ Support'}</button><button class='act' data-a='c'>${IC.chat}${p.cm.length}</button></div>${thread(p,'Add a comment')}</article>`}).join('')};
+$('#sfeed').onclick=ev=>{const x=ev.target.closest('[data-a]');if(!x)return;const p=ideas.find(q=>q.id==x.closest('.idea').dataset.id);if(x.dataset.a=='s'){if(!p.me&&p.n<100&&left(p)<=0){toast('Voting on this idea has closed');return}p.me^=1}else p.open^=1;save();sugRender(false)};
+$('#sfeed').onsubmit=ev=>{ev.preventDefault();const v=ev.target.querySelector('input').value.trim();if(v){ideas.find(x=>x.id==ev.target.dataset.id).cm.push(v);save();sugRender(false)}};
+$('#ssgo').onclick=()=>{const t=$('#stt').value.trim(),d=$('#sdd').value.trim();if(!t||!d){toast('Add a name and a description');return}ideas.push(idea(Date.now(),0,t,0,d,[]));$('#stt').value='';$('#sdd').value='';$('#ss').classList.remove('open');save();sugRender(true);toast('Idea submitted. The 30-day clock has started')};
+
+/* ============ 8. NOTIFICATIONS, PROFILE, SETTINGS ============ */
+const renderN=()=>{const row=(r,i)=>`<button class='ni' data-i='${i}' data-t='${r[4]}'><span class='av2'>${r[0]}</span><div><p>${r[1]}</p><small>${r[2]}</small></div>${r[3]?"<i class='ud'></i>":''}</button>`,m=NOTES.map((r,i)=>[r,i]),nw=m.filter(([r])=>r[3]),ol=m.filter(([r])=>!r[3]);$('#nlist').innerHTML=(nw.length?`<div class='ngh'>New</div>${nw.map(([r,i])=>row(r,i)).join('')}`:'')+(ol.length?`<div class='ngh'>Earlier</div>${ol.map(([r,i])=>row(r,i)).join('')}`:'')};
+$('#bell').onclick=()=>{show('notif');renderN();const d=$('#bell .dot');if(d)d.remove()};
+$('#mark').onclick=()=>{NOTES.forEach(r=>r[3]=0);renderN()};
+$('#nlist').onclick=ev=>{const b=ev.target.closest('.ni');if(!b)return;NOTES[+b.dataset.i][3]=0;if(b.dataset.t){show('home');open(b.dataset.t)}else renderN()};
+const PA=['Quiet','Gentle','Wandering','Velvet','Silver','Hidden'],PN=['Lantern','Harbor','Comet','Willow','Echo','Ember'];let pt='c';
+const mine=()=>{const a=[];Object.keys(DB).filter(n=>n!='Deep Question').forEach(n=>DB[n].filter(p=>p.id>1e3&&!p.hide).forEach(p=>a.push([n,p.text,p.likes+p.liked])));return a};
+const prof=()=>{const nm=pname.join(' '),h=(nm.length*47)%360;$('#pname').textContent=nm;$('#av').textContent=pname[1][0];$('#av').style.background=`linear-gradient(135deg,hsl(${h} 80% 55%),hsl(${h+60} 70% 38%))`;$('#bio').value=bio;
+ const A=mine(),Q=DB['Deep Question'].filter(p=>p.id>1e3&&!p.hide),I=ideas.filter(p=>p.id>1e3),given=Object.values(DB).flat().filter(p=>p.liked).length+ideas.filter(p=>p.me).length;
+ $('#stats').innerHTML=[['Posts',A.length],['Questions',Q.length],['Ideas',I.length],['Supported',given]].map(([l,n])=>`<div><b>${n}</b><span>${l}</span></div>`).join('');
+ $('#badges').innerHTML=[['✍️','First words',A.length>=1],['📚','Storyteller',A.length>=5],['❓','Curious',Q.length>=1],['💡','Idea maker',I.length>=1],['🤍','Supporter',given>=3]].map(([i,t,ok])=>`<div class='bg ${ok?'':'lk'}'><span>${i}</span><small>${t}</small></div>`).join('');
+ const L=pt=='c'?A.map(([b,t,n])=>[t,b+' · '+n+' ♥']):pt=='q'?Q.map(p=>[p.text,p.likes+p.liked+' ♥']):I.map(p=>[p.t,p.n+p.me+'/100 supporters']);
+ document.querySelectorAll('[data-pt]').forEach(x=>x.classList.toggle('on',x.dataset.pt==pt));
+ $('#plist').innerHTML=L.length?L.map(([t,m])=>`<div class='pi'><p>${esc(t)}</p><span>${m}</span></div>`).join(''):"<div class='empty'>Nothing yet.<br>What you post will show up here, only for you.</div>"};
+$('#me').onclick=()=>{show('profile');prof()};
+$('#shuf').onclick=()=>{pname=[PA[Math.random()*6|0],PN[Math.random()*6|0]];save();prof()};
+$('#bio').oninput=ev=>{bio=ev.target.value;save()};
+$('#gear').onclick=()=>$('#sets').classList.add('open');
+$('#t3').onchange=ev=>document.body.classList.toggle('rm',ev.target.checked);
+$('#del').onclick=()=>{Object.keys(DB).forEach(n=>DB[n]=DB[n].filter(p=>p.id<=1e3));ideas=ideas.filter(p=>p.id<=1e3);$('#sets').classList.remove('open');save();prof();toast('Everything you posted was deleted')};
+
+/* explore + top 10 pages */
+const hub={m:'explore',range:'day',q:''};
+const hubRender=()=>{$('#ht').textContent=hub.m=='explore'?'Explore':'Top 10';$('#hq').hidden=hub.m!='explore';$('#hrs').hidden=hub.m!='top';document.querySelectorAll('[data-hr]').forEach(x=>x.classList.toggle('on',x.dataset.hr==hub.range));
+ if(hub.m=='explore'){const q=hub.q.toLowerCase();$('#hl').innerHTML=BUBBLES.filter(b=>!q||(b.n+' '+b.info).toLowerCase().includes(q)).map(b=>`<button class='hr' data-open='${b.n}' style='background-image:${b.look};color:${b.ink||'#fff'}'><div><span style='${b.css}'>${b.n}</span><small>${b.info}</small></div></button>`).join('')}
+ else{const all=[];Object.keys(DB).forEach(n=>DB[n].forEach(p=>{if(!p.hide&&Date.now()-p.ts<=R[hub.range])all.push([n,p])}));all.sort((a,b)=>b[1].likes+b[1].liked-a[1].likes-a[1].liked);$('#hl').innerHTML=all.slice(0,10).map(([n,p],i)=>`<button class='hr tr' data-open='${n}'><b>${i+1}</b><div><small>${n}</small><p>${esc(p.text.slice(0,110))}</p></div><span>${B(n).react[0]} ${p.likes+p.liked}</span></button>`).join('')||"<div class='empty'>Nothing yet.</div>"}};
+const openHub=m=>{hub.m=m;hub.q='';$('#hq').value='';show('hub');hubRender()};
+$('#hq').oninput=ev=>{hub.q=ev.target.value;hubRender()};
+/* one click listener for all the small controls */
+document.addEventListener('click',ev=>{const g=s=>ev.target.closest(s);let x;
+ if(!g('#pop,[data-pop]'))closePop();
+ if(x=g('[data-pop]'))openPop(x,x.dataset.pop);
+ if(x=g('#pop [data-fcat]')){st.fc=x.dataset.fcat;$('#pop').innerHTML=popHTML('font')}
+ if(x=g('[data-fi]')){st.font=+x.dataset.fi;pick();closePop()}
+ if(x=g('[data-c]')){st.col=x.dataset.c;pick();if(g('#pop'))closePop()}
+ if(x=g('[data-bt]')){bs.tab=x.dataset.bt;render(true)}
+ if(x=g('[data-br]')){bs.range=x.dataset.br;render(true)}
+ if(x=g('[data-tag]')){bs.q='#'+x.dataset.tag;$('#bq').value=bs.q;render(true)}
+ if(g('[data-clr]')){bs.q='';$('#bq').value='';render(true)}
+ if(x=g('[data-pt]')){pt=x.dataset.pt;prof()}
+ if(x=g('[data-st]')){su.tab=x.dataset.st;sugRender(true)}
+ if(x=g('[data-sr]')){su.range=x.dataset.sr;sugRender(true)}
+ if(x=g('[data-hr]')){hub.range=x.dataset.hr;hubRender()}
+ if(x=g('[data-s]')){const s=x.dataset.s;s=='surprise'?open(BUBBLES.filter(b=>!b.special)[Math.random()*12|0].n):openHub(s)}
+ if(x=g('[data-open]'))open(x.dataset.open);
+ if(x=g('[data-close]'))$('#'+x.dataset.close).classList.remove('open')});
+</script>
+</body></html>
