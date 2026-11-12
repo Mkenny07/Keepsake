@@ -27,4 +27,4 @@ Open `index.html` in your browser.
 - [ ] Shared posts and interactions
 - [ ] Community moderation
 - [ ] Real notifications
-- [ ] Improved privacy and security
+- [ ] Improved privacy and security and more to come
